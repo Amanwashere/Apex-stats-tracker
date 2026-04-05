@@ -1,8 +1,16 @@
 import requests
 import os
 from dotenv import load_dotenv
+import asyncio
+from telegram import Bot
 
 load_dotenv()
+
+async def send_alert(message):
+    bot_token = os.getenv("Bot")
+    chat_id = os.getenv("Chatid")
+    my_bot = Bot(bot_token)
+    await my_bot.send_message(chat_id=chat_id, text=message)
 
 def apex_stats():
 
@@ -31,5 +39,9 @@ def apex_stats():
     career_kills: {career_kills}
     Kd: {Kd}
     """)
-
+    message = f"Name: {name}\nLevel: {account_level}\nRank: {rank}\nKills: {career_kills}\nKD: {Kd}"
+    asyncio.run(send_alert(message))
 apex_stats()
+
+
+
